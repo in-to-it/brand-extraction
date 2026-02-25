@@ -29,6 +29,7 @@ program
   .option("--dtcg", "Export in W3C Design Tokens (DTCG) format")
   .option("--dark-mode", "Extract colors from dark mode")
   .option("--mobile", "Extract from mobile viewport")
+  .option("--no-explore", "Skip exploring product/category pages (exploration is on by default)")
   .option("--slow", "3x longer timeouts for slow-loading sites")
   .option("--no-sandbox", "Disable browser sandbox (needed for Docker/CI)")
   .action(async (input, opts) => {
@@ -68,6 +69,7 @@ program
             navigationTimeout: 90000,
             darkMode: opts.darkMode,
             mobile: opts.mobile,
+            explore: opts.explore !== false,
             slow: opts.slow,
           });
           break;

@@ -3,7 +3,7 @@
 Style guide for applying brand to popup templates, marketing templates, and UI components.
 
 - **URL:** https://marysquare.com/
-- **Extracted:** 02/25/2026, 10:59:26 AM EST
+- **Extracted:** 02/25/2026, 11:32:42 AM EST
 - **Theme:** light
 
 ## Logo
@@ -20,7 +20,11 @@ Style guide for applying brand to popup templates, marketing templates, and UI c
 
 Brand color palette. Use for backgrounds, text, accents, and borders.
 
-#ffffff, #9a9a9a, #393c3c, #be2119, #ff005d, #535353, #747576, #c8102e, #000000, #fbca10, #41a1e6, #366d12, #322e2f, #96b4ff, #81c6bc
+**Primary** (backgrounds, section blocks): #ffffff, #000000, #81c6bc, #dddddd, #8ed3c7, #f3f0eb, #9a9a9a, #393c3c
+
+**Secondary** (text, icons, small accents): #be2119, #ff005d, #535353, #747576, #c8102e, #fbca10, #41a1e6, #366d12
+
+**Accent** (small details, borders, labels): #322e2f, #96b4ff
 
 ## Typography
 
@@ -34,9 +38,9 @@ Brand color palette. Use for backgrounds, text, accents, and borders.
 
 Button style guide. Apply these specs to CTA buttons in popups, forms, and marketing templates.
 
-### CTA variant 1
+### Primary CTA
 
-- **Background:** `#dddddd`
+- **Background:** `#8ed3c7`
 - **Text color:** `#000000`
 - **Font:** Raleway, 14px, weight 400
 - **Letter spacing:** 0.35px
@@ -45,9 +49,9 @@ Button style guide. Apply these specs to CTA buttons in popups, forms, and marke
 - **Padding:** 1px 6px
 - **Hover:** bg #f6f6f7
 
-### Primary CTA
+### CTA variant 2
 
-- **Background:** `#8ed3c7`
+- **Background:** `#dddddd`
 - **Text color:** `#000000`
 - **Font:** Raleway, 14px, weight 400
 - **Letter spacing:** 0.35px
@@ -80,21 +84,3 @@ Link style guide for inline links, nav links, and CTAs styled as links.
 - **Font:** Raleway, 14px, weight 500
 - **Text decoration:** none
 - **Hover text decoration:** underline
-
-## Breakpoints
-
-1355px → 1200px → 1140px → 1050px → 1024px → 1000px → 992px → 960px → 959px → 870px → 800px → 769px → 768px → 767px → 750px → 700px → 690px → 689px → 640px → 600px → 576px → 555px → 550px → 480px → 430px → 400px → 360px → 359px → 320px → 98px
-
-## Icon System
-
-- Font Awesome (icon-font)
-- SVG Icons (svg)
-
-## Frameworks
-
-- Tailwind CSS
-- UIkit
-- Headless UI
-- PrimeReact/Vue/NG
-- Fluent UI
-- Element Plus/UI
