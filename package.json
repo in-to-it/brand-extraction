@@ -7,8 +7,13 @@
   "bin": {
     "dembrandt": "index.js"
   },
+  "exports": {
+    ".": "./index.js",
+    "./api": "./api.js"
+  },
   "files": [
     "index.js",
+    "api.js",
     "lib/"
   ],
   "scripts": {

@@ -32,6 +32,7 @@ program
   .option("--no-explore", "Skip exploring product/category pages (exploration is on by default)")
   .option("--slow", "3x longer timeouts for slow-loading sites")
   .option("--no-sandbox", "Disable browser sandbox (needed for Docker/CI)")
+  .option("--include-wordpress-presets", "Include WordPress --wp--preset CSS variables (block themes)")
   .action(async (input, opts) => {
     let url = input;
     if (!url.startsWith("http://") && !url.startsWith("https://")) {
@@ -71,6 +72,7 @@ program
             mobile: opts.mobile,
             explore: opts.explore !== false,
             slow: opts.slow,
+            includeWordPressPresets: opts.includeWordpressPresets,
           });
           break;
         } catch (err) {
@@ -132,17 +134,17 @@ program
         }
       }
 
-      // Save markdown to experiments folder
+      // Save markdown to output_markdown folder
       try {
         const domain = new URL(url).hostname.replace("www.", "");
-        const experimentsDir = join(process.cwd(), "experiments");
-        mkdirSync(experimentsDir, { recursive: true });
-        const mdPath = join(experimentsDir, `${domain}.md`);
-        const markdown = exportToMarkdown(result, experimentsDir);
+        const outputMarkdownDir = join(process.cwd(), "output_markdown");
+        mkdirSync(outputMarkdownDir, { recursive: true });
+        const mdPath = join(outputMarkdownDir, `${domain}.md`);
+        const markdown = exportToMarkdown(result, outputMarkdownDir);
         writeFileSync(mdPath, markdown);
         console.log(
           chalk.dim(
-            `📄 Markdown saved to: ${chalk.hex('#8BE9FD')(`experiments/${domain}.md`)}`
+            `📄 Markdown saved to: ${chalk.hex('#8BE9FD')(`output_markdown/${domain}.md`)}`
           )
         );
       } catch (err) {

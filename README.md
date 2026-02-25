@@ -20,6 +20,71 @@ Or use npx without installing: `npx dembrandt bmw.de`
 
 Requires Node.js 18+
 
+## Quick Start
+
+### Try It (Test the Output)
+
+```bash
+# 1. One-off test — no install
+npx dembrandt stripe.com
+
+# 2. Inspect raw JSON
+npx dembrandt stripe.com --json-only | head -100
+
+# 3. Save and browse in Local UI
+npx dembrandt stripe.com --save-output
+cd local-ui && npm install && node server.js & npm run dev
+# Open http://localhost:5173
+```
+
+### Use It (CLI in Your Workflow)
+
+```bash
+npm install -g dembrandt   # or: npm install dembrandt
+dembrandt mysite.com --save-output --dtcg
+# Output: output/mysite.com/TIMESTAMP.json (and .tokens.json)
+```
+
+### Use It (Library in Another Project)
+
+```bash
+npm install dembrandt
+```
+
+```js
+import { extractBrand } from 'dembrandt/api';
+
+const brand = await extractBrand('https://client-store.myshopify.com', {
+  slow: true,      // for Shopify themes
+  explore: true,   // product/collection pages
+});
+// brand.colors, brand.typography, brand.logo, etc.
+```
+
+### Example: marysquare.com (Shopify store)
+
+Here's a concrete example. Run this command:
+
+```bash
+npx dembrandt marysquare.com --save-output
+```
+
+**What it does:** Dembrandt launches a headless browser, loads marysquare.com, waits for the page to fully render (including any JavaScript), then extracts design tokens from the live DOM. With `--save-output`, it writes two files:
+
+1. **`output/marysquare.com/TIMESTAMP.json`** — Full extraction as JSON (colors, typography, logo URLs, button styles, breakpoints, etc.)
+2. **`output_markdown/marysquare.com.md`** — A human-readable style guide you can use for popups, marketing templates, or UI components
+
+**What you get:** For marysquare.com, the extraction returns things like:
+
+- **Logo** — 200×25px favicon asset URL
+- **Colors** — Primary palette (#81c6bc, #8ed3c7, #be2119, #ff005d, etc.)
+- **Typography** — ivy-presto-display (48px headlines), Raleway (14px body)
+- **CTAs** — Button specs: teal primary (#8ed3c7), gray secondary (#dddddd), border-radius 999px
+- **Breakpoints** — 30 responsive breakpoints
+- **Frameworks** — Tailwind, UIkit, Headless UI, etc.
+
+Because marysquare.com is a Shopify store, Dembrandt also explores product/collection pages (via `--explore`, on by default) to capture colors and styles from across the site.
+
 ## What to expect from extraction?
 
 - Colors (semantic, palette, CSS variables)
@@ -43,9 +108,24 @@ dembrandt bmw.de --mobile          # Use mobile viewport (390x844, iPhone 12/13/
 dembrandt bmw.de --slow            # 3x longer timeouts (24s hydration) for JavaScript-heavy sites
 dembrandt bmw.de --no-sandbox      # Disable Chromium sandbox (required for Docker/CI)
 dembrandt bmw.de --browser=firefox # Use Firefox instead of Chromium (better for Cloudflare bypass)
+dembrandt bmw.de --include-wordpress-presets  # Include WordPress block theme --wp--preset colors
 ```
 
 Default: formatted terminal display only. Use `--save-output` to persist results as JSON files. Browser automatically retries in visible mode if headless extraction fails.
+
+### Shopify & WordPress Sites
+
+Dembrandt works well on Shopify and WordPress storefronts. Use these tips for best results:
+
+**Shopify:**
+- `--explore` (default on) targets `/products`, `/collections`, `/shop` — ideal for storefronts
+- Use `--slow` for Dawn or heavy themes with lots of JavaScript
+- Use `--browser=firefox` if stores use Cloudflare or bot protection
+
+**WordPress:**
+- Use `--slow` for plugin-heavy sites (WooCommerce, page builders)
+- Use `--include-wordpress-presets` to include `--wp--preset` CSS variables from block themes (theme.json colors)
+- Use `--browser=firefox` for hosts with aggressive bot protection
 
 ### Browser Selection
 
@@ -119,12 +199,36 @@ Open http://localhost:5173 to browse saved extractions.
 
 Extractions are performed via CLI (`dembrandt <url> --save-output`) and automatically appear in the UI.
 
+## Programmatic API
+
+Use Dembrandt as a library to fetch brand tokens from code:
+
+```js
+import { extractBrand } from 'dembrandt/api';
+
+const brand = await extractBrand('https://example.com', {
+  darkMode: false,
+  mobile: false,
+  explore: true,      // product/category pages (Shopify, etc.)
+  slow: false,        // 3x timeouts for slow sites
+  browser: 'chromium', // or 'firefox'
+  noSandbox: false,   // set true for Docker/CI
+  includeWordPressPresets: false,  // include --wp--preset for WordPress block themes
+});
+
+console.log(brand.colors, brand.typography, brand.logo);
+```
+
+Options mirror CLI flags. Requires Node.js 18+ and Playwright browsers (`npx playwright install` if needed).
+
 ## Use Cases
 
 - Brand audits & competitive analysis
 - Design system documentation
 - Reverse engineering brands
 - Multi-site brand consolidation
+- **Shopify/WordPress agencies:** Extract client brand tokens for popups, marketing templates, and UI components
+- **Engineers:** Programmatically fetch brand data for multi-site tooling or design system sync
 
 ## How It Works
 
